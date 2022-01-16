@@ -20,9 +20,18 @@
   display: flex;
 }
 
-.Card {
+.PlayCard {
   margin-left: 1em;
   margin-right: 1em;
+}
+
+.PlayedCard .Card-Display {
+  background-color: gray;
+}
+
+.SelectedCard .Card-Display {
+  background-color: navy;
+  color: white;
 }
 
 .Table {
@@ -31,4 +40,9 @@
   max-width: 30em;
   min-height: 7em;
   margin: 1em;
+}
+
+.Results {
+  margin-top: 2em;
+  margin-left: 20em;
 }
