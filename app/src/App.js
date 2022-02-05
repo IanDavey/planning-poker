@@ -88,9 +88,8 @@ GameContext.Context = createContext([]);
 GameContext.useContext = () => useContext(GameContext.Context);
 
 function Card({ name, value, onSelect }) {
-  value = value !== undefined ?
-    isNaN(Number.parseFloat(value)) ? "?" : value :
-    "";
+  const number = isNaN(Number.parseFloat(value)) ? "?" : value;
+  value = value !== undefined ? number : "";
   return <table><tbody>
     <tr><td><div className="Card-Display" onClick={onSelect}><span className="Card-Value">{value.toString()}</span></div></td></tr>
     <tr><td className="Name-Label">{name}</td></tr>
@@ -160,6 +159,7 @@ function Controls() {
   const { revealed } = UIContext.useContext();
   return <div>
     <Choices/>
+    <hr className="Show-Reset-Controls"/>
     {revealed ? <ResetButton/> : <ShowButton/>}
   </div>;
 }
