@@ -69,3 +69,9 @@
   padding: 0;
   text-align: right;
 }
+
+.Github {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}

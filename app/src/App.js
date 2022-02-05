@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { DiGithubBadge } from 'react-icons/di';
 import './App.css';
 
 import { io } from 'socket.io-client';
@@ -9,6 +10,12 @@ function Version() {
   return <div className="Version">
     <p>Client Version: {process.env.REACT_APP_VERSION}</p>
     <p>Server Version: {serverVersion}</p>
+  </div>;
+}
+
+function Github() {
+  return <div className="Github">
+    <a href="https://github.com/IanDavey/planning-poker" target="_blank"><DiGithubBadge size={21}/></a>
   </div>;
 }
 
@@ -199,6 +206,7 @@ function App() {
       </SocketFuncsContext>
     </GameContext> :
     <NamePrompt setReady={setReady}/>}
+    <Github/>
   </div>;
 }
 
