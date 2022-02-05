@@ -168,7 +168,7 @@ function Results() {
   const { revealed } = UIContext.useContext();
   const { stats } = GameContext.useContext();
   return revealed ? <table className="Results"><tbody>
-    <tr><td align="right">Mean:</td><td>{stats.mean}</td></tr>
+    <tr><td align="right">Mean:</td><td>{Math.round(100*stats.mean) / 100}</td></tr>
   </tbody></table> : null;
 }
 
