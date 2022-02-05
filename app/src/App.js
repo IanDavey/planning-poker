@@ -106,9 +106,9 @@ function PlayCard({ name, value }) {
 }
 
 function SelectCard({ value }) {
-  const { selection, setSelection } = UIContext.useContext();
+  const { revealed, selection, setSelection } = UIContext.useContext();
   const selected = selection === value;
-  return <div className={selected ? "SelectedCard" : ""}><Card value={value} onSelect={() => setSelection(selected ? undefined : value)}/></div>;
+  return <div className={selected ? "SelectedCard" : ""}><Card value={value} onSelect={() => revealed || setSelection(selected ? undefined : value)}/></div>;
 }
 
 function Table() {
