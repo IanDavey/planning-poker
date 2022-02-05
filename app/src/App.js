@@ -4,9 +4,18 @@ import './App.css';
 import { io } from 'socket.io-client';
 import { v4 as uuid } from 'uuid';
 
+function Version() {
+  const { serverVersion } = UIContext.useContext();
+  return <div className="Version">
+    <p>Client Version: {process.env.REACT_APP_VERSION}</p>
+    <p>Server Version: {serverVersion}</p>
+  </div>;
+}
+
 function UIContext({ children }) {
   const [selection, setSelection] = useState(undefined);
   const [revealed, setRevealed] = useState(false);
+  const [serverVersion, setServerVersion] = useState(null);
   const socketFuncs = SocketFuncsContext.useContext()[0];
   const handleRevealChange = newValue => {
     setRevealed(newValue);
@@ -21,7 +30,7 @@ function UIContext({ children }) {
     if (newValue !== undefined) socketFuncs.sendSelect && socketFuncs.sendSelect(newValue);
     else socketFuncs.sendUnselect && socketFuncs.sendUnselect();
   };
-  return <UIContext.Context.Provider value={{ revealed, setRevealed: handleRevealChange, selection, setSelection: handleSelectionChange }}>{children}</UIContext.Context.Provider>
+  return <UIContext.Context.Provider value={{ revealed, setRevealed: handleRevealChange, selection, setSelection: handleSelectionChange, serverVersion, setServerVersion }}>{children}</UIContext.Context.Provider>
 }
 UIContext.Context = createContext([]);
 UIContext.useContext = () => useContext(UIContext.Context);
@@ -35,7 +44,7 @@ SocketFuncsContext.useContext = () => useContext(SocketFuncsContext.Context);
 
 function SocketHandler({ children }) {
   const game = GameContext.useContext();
-  const { setRevealed, setSelection } = UIContext.useContext();
+  const { setRevealed, setSelection, setServerVersion } = UIContext.useContext();
   const setFuncs = SocketFuncsContext.useContext()[1];
   useEffect(() => {
     const socket = io({ path: '/poker/api' });
@@ -43,6 +52,7 @@ function SocketHandler({ children }) {
     socket.on('state', state => {
       const sels = new Map(state.selections);
       game.setPlayers(state.players.map(({ name, guid }) => sels.has(guid) ? <PlayCard key={guid} name={name} value={sels.get(guid)}/> : <PlayCard key={guid} name={name}/>));
+      setServerVersion(state.version);
       setRevealed(oldValue => {
         if (oldValue && !state.revealed) setSelection(undefined);
         return state.revealed;
@@ -183,6 +193,7 @@ function App() {
             <Playfield/>
             <Controls/>
             <Results/>
+            <Version/>
           </SocketHandler>
         </UIContext>
       </SocketFuncsContext>

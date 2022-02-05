@@ -1,4 +1,7 @@
 const { Server } = require('socket.io');
+const { version } = require('./package.json');
+
+console.log(`Running server ${version}`);
 
 const io = new Server(5000, { path: '/poker/api' });
 
@@ -15,7 +18,7 @@ function broadcastState() {
             count++;
         }
     }
-    io.emit('state', { players: Array.from(players.values()), revealed, selections: Array.from(selections.values()), stats: { mean: total / count } });
+    io.emit('state', { version, players: Array.from(players.values()), revealed, selections: Array.from(selections.values()), stats: { mean: total / count } });
 }
 
 io.on('connection', socket => {
